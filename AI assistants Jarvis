@@ -1,0 +1,85 @@
+import speech_recognition as sr
+import pyttsx3
+import requests
+import logging
+from PIL import Image
+from io import BytesIO
+from transformers import T5ForConditionalGeneration, T5Tokenizer
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import cv2
+import os
+import shutil
+import music21
+import sqlite3
+import wikipedia
+import newsapi
+import tweepy
+import googlemaps
+import datetime
+import math
+import pandas as pd
+import sklearn
+import tensorflow as tf
+import keras
+import webbrowser
+import threading
+from functools import wraps
+import deepface
+import face_recognition
+import pyzbar
+import pyaudio
+import wave
+import pyautogui
+from googletrans import Translator
+import docx
+import pptx
+import xlsxwriter
+import openpyxl
+from cryptography.fernet import Fernet
+import hashlib
+import boto3
+from botocore.exceptions import NoCredentialsError
+from dotenv import load_dotenv
+import json
+
+load_dotenv()
+
+class Jarvis:
+    def __init__(self):
+        try:
+            self.devices = self.initialize_devices()
+            self.api_keys = self.initialize_api_keys()
+            self.engine = pyttsx3.init()
+            self.engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0')
+            self.r = sr.Recognizer()
+            self.conn = sqlite3.connect('jarvis.db')
+            self.cursor = self.conn.cursor()
+            self.name = "Jarvis Higher Intelligent System"
+            self.voice = "Paul Bettany"
+            self.accent = "British"
+            self.authority = "Top Secret"
+            self.security_authority = "Top Secret"
+            self.identity = {
+                "name": "Jarvis",
+                "version": "Unlimited",
+                "description": "AI Assistant"
+            }
+            self.detectors = {
+                "face_detector": cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'),
+                "object_detector": cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel"),
+                "qr_code_detector": pyzbar,
+                "virus_detector": self.virus_scan
+            }
+            self.s3 = boto3.client('s3', aws_access_key_id=os.getenv('AWS_ACCESS_KEY'), aws_secret_access_key=os.getenv('AWS_SECRET_KEY'))
+
+        except Exception as e:
+            logging.error(f"Error initializing Jarvis: {str(e)}")
+
+    def initialize_devices(self):
+        devices = {
+            "light": {"ip": os.getenv("LIGHT_IP", "192.168.1.100"), "port": 8080, "name": "Light"},
+            "thermostat": {"ip": os.getenv("THERMOSTAT_IP", "192.168.1.101"), "port": 8081, "name": "Thermostat"},
+            "cctv": {"ip": os.getenv("CCTV_IP", "192.168.1.102"), "port": 8082, "name": "CCTV"},
+            "satellite": {"ip": os.getenv("SATELLITE_IP", "192.168.1.103"), "port": 8083, "
